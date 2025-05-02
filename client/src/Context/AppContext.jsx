@@ -2,16 +2,20 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-import {folders} from "../assets/data.js"
+import { folders } from "../assets/data.js"
 
 export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
 
-  const [user, setuser] = useState(null);
   const [showUserLogin, setShowUserLogin] = useState(null);
   const [folder, setFolder] = useState();
+  const [currentUser, setCurrentUser] = useState({
+    username: "",
+    roomId: "",
+    roomname:"",
+  });
   const navigate = useNavigate();
-  const val = {user,setuser,showUserLogin,setShowUserLogin,axios,navigate};
+  const val = { showUserLogin, setShowUserLogin, axios, navigate ,currentUser, setCurrentUser};
   return <AppContext.Provider value={val}>{children}</AppContext.Provider>;
 };
 
