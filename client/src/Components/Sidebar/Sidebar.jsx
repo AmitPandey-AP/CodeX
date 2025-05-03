@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import SidebarButton from "@/components/sidebar/sidebar-views/SidebarButton";
-import { useAppContext } from "@/context/AppContext";
+import SidebarButton from "./Sidebar-Views/SidebarButton";
+import { useAppContext } from "../../Context/AppContext.jsx";
 import { useSocket } from "@/context/SocketContext";
 import { useViews } from "@/context/ViewContext";
 import useResponsive from "@/hooks/useResponsive";

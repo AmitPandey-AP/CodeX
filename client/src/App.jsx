@@ -5,6 +5,7 @@ import { Login } from "./Pages/Login.jsx";
 import Room from "./Pages/Room.jsx";
 import Hero from "./Pages/Hero.jsx";
 import ProfilePage from "./Pages/Profile.jsx";
+import EditorPage from "./Pages/Editor.jsx";
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/dashboard" element={<Hero />}></Route>
         <Route path="/room" element={<Room />}></Route>
-        <Route path="/profile" element={<ProfilePage />}></Route> 
-
+        <Route path="/profile" element={<ProfilePage />}></Route>
+        <Route path="/editor" element={<EditorPage />}></Route>
       </Routes>
     </div>
   );
