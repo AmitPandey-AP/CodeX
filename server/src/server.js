@@ -28,46 +28,46 @@ app.get("/", (req, res) => {
   res.send("API is working");
 });
 
-app.use("/api/user", userRouter);
+// app.use("/api/user", userRouter);
 
-// create server
-const server = http.createServer(app);
-const io = new Server(server,{
-  cors:{
-    origin:"*"
-  }
-})
+// // create server
+// const server = http.createServer(app);
+// const io = new Server(server,{
+//   cors:{
+//     origin:"*"
+//   }
+// })
 
-io.on("connection",(socket)=>{
-  console.log("User Connected Successfully");
+// io.on("connection",(socket)=>{
+//   console.log("User Connected Successfully");
 
-  // join user
-  socket.on('join-room',(roomId)=>{
-    socket.join(roomId);
-    console.log(`This roomId added`)
-  })
-  socket.on('sendMessage',async ({senderId,text,roomId})=>{
-    const chat = await Chat.findOne({roomId});
-    if(!chat){
-      const newChat = await Chat.create({
-        roomId,
-        messages:[{
-          senderId,
-          text
-        }]
-      })
-    }else{
-      let newChat = await Chat.findOne({roomId})
-      newChat.messages.push({senderId,text})
-      await newChat.save()
-    }
-    socket.to(roomId).emit("messageReceived",{senderId,text})
-  })
-  socket.on('disconnect',()=>{
-    console.log('user disconnected');
-  })
-})
+//   // join user
+//   socket.on('join-room',(roomId)=>{
+//     socket.join(roomId);
+//     console.log(`This roomId added`)
+//   })
+//   socket.on('sendMessage',async ({text,roomId})=>{
+//     // const chat = await Chat.findOne({roomId});
+//     // if(!chat){
+//     //   const newChat = await Chat.create({
+//     //     roomId,
+//     //     messages:[{
+//     //       senderId,
+//     //       text
+//     //     }]
+//     //   })
+//     // }else{
+//     //   let newChat = await Chat.findOne({roomId})
+//     //   newChat.messages.push({senderId,text})
+//     //   await newChat.save()
+//     // }
+//     socket.to(roomId).emit("messageReceived",{text})
+//   })
+//   socket.on('disconnect',()=>{
+//     console.log('user disconnected');
+//   })
+// })
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log(`server is Running on http://localhost:${port}`);
 });
