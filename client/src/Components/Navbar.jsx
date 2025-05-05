@@ -5,9 +5,7 @@ import { Link } from "react-router-dom"
 import { useAppContext } from "../Context/AppContext";
 
 const TryCodeXButton = () => {
-
     const { navigate } = useAppContext();
-
     return (
         <button
             onClick={() => {

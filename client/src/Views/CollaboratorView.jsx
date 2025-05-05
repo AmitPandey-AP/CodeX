@@ -48,7 +48,7 @@ const Collab = () => {
                 <div className=" bg-[#1e1e1e] flex flex-wrap space-x-2 space-y-2">
 
                     {users.map((user, index) => (
-                        <UserCard name={user.name} initial={user.name[0]} online={user.online} />
+                        <UserCard key={index} name={user.name} initial={user.name[0]} online={user.online} />
                     ))}
 
                 </div>

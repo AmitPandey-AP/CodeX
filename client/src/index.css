@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@plugin "daisyui";
 *{
   box-sizing: border-box;
 }
@@ -22,4 +22,3 @@ html,body{
   scrollbar-width:thin;
   scrollbar-color: #5cc080 #1f2937;
 }
-  

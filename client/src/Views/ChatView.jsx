@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoSend } from 'react-icons/io5';
+import createSocketConnection from '../Utils/socket'
+import { useAppContext } from '../Context/AppContext';
+const socket = createSocketConnection();
 
 export default function GroupChat() {
+    const { currentUser } = useAppContext()
     const [messages, setMessages] = useState([
         { sender: 'edn', text: 'hfw', time: '2:52 PM' },
         { sender: 'edn', text: 'ewhb', time: '2:52 PM' },
@@ -15,11 +19,21 @@ export default function GroupChat() {
     const [input, setInput] = useState('');
 
     const handleSend = () => {
+        socket.emit('sendMessage', { text: messages, roomId: currentUser.roomId });
+        setMessages([...messages,{text:input}])
         if (input.trim()) {
             setMessages([...messages, { sender: 'edn', text: input, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
             setInput('');
         }
     };
+    useEffect(() => {
+        socket.emit('join-room', { roomId: currentUser.roomId })
+        console.log("connection request send");
+        socket.on("messageReceived", ({text}) => {
+            setMessages([...messages, {text}]);
+        })
+        return () => socket.disconnect();
+    },[])
 
     return (
         <div className="bg-[#1e1e1e] text-white p-4 rounded-md w-full max-w-md  border border-gray-600 h-vph flex flex-col">
@@ -28,7 +42,7 @@ export default function GroupChat() {
             {/* Chat messages container */}
             <div className="bg-[#1e1e1e] h-[576px] overflow-y-auto space-y-1 scrollbar">
                 {messages.map((msg, index) => (
-                    <div key={index} className="bg-[#1e1e1e] p-2 rounded-md flex justify-between items-start border-2 border-gray-700">
+                    <div key={index} className="bg-[#1e1e1e] p-2 rounded-md flex justify-between items-start border-2 border-gray-700 w-[200px]">
                         <div>
                             <p className="text-green-400 text-sm font-semibold">{msg.sender}</p>
                             <p className="text-white text-sm">{msg.text}</p>
@@ -58,3 +72,57 @@ export default function GroupChat() {
         </div>
     );
 }
+
+
+// import React,{useState} from 'react'
+
+// const ChatView = () => {
+//     const [message, setMessga] = useState();
+//     const sendMessage=() => {
+    
+//     }
+//     return (
+//         <div className='border w-[376px]'>
+//             <div className="chat chat-start">
+//                 <div className="chat-image avatar">
+//                     <div className="w-10 rounded-full">
+//                         <img
+//                             alt="Tailwind CSS chat bubble component"
+//                             src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+//                         />
+//                     </div>
+//                 </div>
+//                 <div className="chat-header">
+//                     Obi-Wan Kenobi
+//                     <time className="text-xs opacity-50">12:45</time>
+//                 </div>
+//                 <div className="chat-bubble">You were the Chosen One!</div>
+//                 <div className="chat-footer opacity-50">Delivered</div>
+//             </div>
+//             <div className="chat chat-end">
+//                 <div className="chat-image avatar">
+//                     <div className="w-10 rounded-full">
+//                         <img
+//                             alt="Tailwind CSS chat bubble component"
+//                             src="https://img.daisyui.com/images/profile/demo/anakeen@192.webp"
+//                         />
+//                     </div>
+//                 </div>
+//                 <div className="chat-header">
+//                     Anakin
+//                     <time className="text-xs opacity-50">12:46</time>
+//                 </div>
+//                 <div className="chat-bubble">I hate you!</div>
+//                 <div className="chat-footer opacity-50">Seen at 12:46</div>
+//             </div>
+//             <input
+//                 type="text"
+//                 value={message}
+//                 onChange={(e)=>setMessage(e.target.value)}
+//             />
+//             <button onClick={sendMessage}></button>
+//         </div>
+//     )
+// }
+
+// export default ChatView

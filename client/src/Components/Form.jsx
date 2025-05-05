@@ -11,13 +11,16 @@ const Form = () => {
     const { currentUser, setCurrentUser, navigate } = useAppContext()
 
     const [roomname, setRoomname] = useState("");
+    const [roomId, setRoomId] = useState();
 
     const usernameRef = useRef(null);
     const userroomRef = useRef(null);
 
 
     const createNewRoomId = () => {
-        setCurrentUser({ ...currentUser, roomId: uuidv4() });
+        const id = uuidv4();
+        setCurrentUser({ ...currentUser, roomId: id });
+        setRoomId(id);
         toast.success("Created a new Room Id");
         usernameRef.current?.focus();
     };
@@ -98,9 +101,9 @@ const Form = () => {
                     type="text"
                     name="roomId"
                     placeholder="Room Id"
-                    readOnly
                     className="w-full rounded-md border border-gray-500 bg-darkHover px-3 py-3 focus:outline-none"
-                    value={currentUser.roomId}
+                    value={roomId}
+                    onChange={(e) => setRoomId(e.target.value)}
                 />
 
                  <input
@@ -113,6 +116,7 @@ const Form = () => {
                     // ref={userroomRef}
                 />
                 <button
+                    onClick={() => navigate('/editor')}
                     type="submit"
                     className="mt-2 w-full rounded-md bg-green-400 px-8 py-3 text-lg font-semibold text-black"
                 >

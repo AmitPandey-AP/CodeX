@@ -14,8 +14,9 @@ export const AppContextProvider = ({ children }) => {
     roomId: "",
     roomname:"",
   });
+  const [viewState, setViewState] = useState("Folder");
   const navigate = useNavigate();
-  const val = { showUserLogin, setShowUserLogin, axios, navigate ,currentUser, setCurrentUser};
+  const val = { showUserLogin, setShowUserLogin, axios, navigate, currentUser, setCurrentUser, viewState, setViewState };
   return <AppContext.Provider value={val}>{children}</AppContext.Provider>;
 };
 

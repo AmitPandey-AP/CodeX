@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   Folder,
   FolderOpen,
@@ -56,9 +56,9 @@ const TreeNode = ({
         onDoubleClick={(e) => {
           e.stopPropagation();
           setSelectedId(node.id);
+          setEditing(true); // Now rename triggers only on double click
         }}
       >
-        {/* Folder/File icon */}
         {node.type === "folder" ? (
           expanded ? (
             <FolderOpen
@@ -83,7 +83,6 @@ const TreeNode = ({
           <FileCode2 className="text-blue-400 mr-1" size={16} />
         )}
 
-        {/* File/Folder name or input */}
         {editing ? (
           <input
             className="bg-gray-600 text-white px-1 rounded w-40 text-sm"
@@ -97,7 +96,6 @@ const TreeNode = ({
           <span className="text-sm text-gray-200">{node.name}</span>
         )}
 
-        {/* Action buttons */}
         {isSelected && (
           <div className="flex ml-2 gap-1">
             <Pencil
@@ -142,7 +140,6 @@ const TreeNode = ({
         )}
       </div>
 
-      {/* Children */}
       {node.type === "folder" && expanded && node.children?.length > 0 && (
         <div className="pl-4 border-l border-gray-600 ml-1">
           {node.children.map((child, idx) => (
@@ -231,7 +228,6 @@ const FileExplorer = () => {
       className="bg-[#1e1e1e] text-white text-sm p-4 w-[350px] min-h-screen font-mono"
       onClick={() => setSelectedId(null)}
     >
-      {/* EXPLORER Header */}
       <div
         className="flex justify-between items-center mb-3"
         onClick={(e) => e.stopPropagation()}
@@ -249,7 +245,6 @@ const FileExplorer = () => {
         </button>
       </div>
 
-      {/* File/Folder Tree */}
       {tree.map((node, index) => (
         <TreeNode
           key={node.id}
