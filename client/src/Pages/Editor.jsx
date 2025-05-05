@@ -1,59 +1,24 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
-import SplitterComponent from "../Components/SpillterComponent.jsx";
-// import ConnectionStatusPage from "../Components/connection/ConnectionStatusPage";
-import Sidebar from "../Components/sidebar/Sidebar";
-// import WorkSpace from "../assets/components/workspace";
-import { useAppContext } from "../Context/AppContext.jsx";
-// import { useSocket } from "@/context/SocketContext";
-// import useFullScreen from "@/hooks/useFullScreen";
-// import useUserActivity from "@/hooks/useUserActivity";
-// import { SocketEvent } from "@/types/socket";
-// import { USER_STATUS } from "@/types/user";
+import React from 'react'
+import Sidebar from '../Components/Sidebar'
+import RunCodePanel from '../Views/RunView'
+import GroupChat from '../Views/ChatView'
+import Collab from '../Views/CollaboratorView'
+import SettingsPanel from '../Views/SettingView'
+import FileExplorer from '../Views/FileView'
 
-function EditorPage() {
-  useUserActivity();         // Tracks user's activity
-  useFullScreen();           // Enables fullscreen mode
-
-  const navigate = useNavigate();
-  const { roomId } = useParams();
-  const location = useLocation();
-  const { status, setCurrentUser, currentUser } = useAppContext();
-  // const { socket } = useSocket();
-
-  // useEffect(() => {
-  //   if (currentUser.username && currentUser.username.length > 0) return;
-
-  //   const username = location.state?.username;
-
-  //   if (!username) {
-  //     navigate("/", {
-  //       state: { roomId },
-  //     });
-  //   } else if (roomId) {
-  //     const user = { username, roomId };
-  //     setCurrentUser(user);
-  //     socket.emit(SocketEvent.JOIN_REQUEST, user);
-  //   }
-  // }, [
-  //   currentUser.username,
-  //   location.state?.username,
-  //   navigate,
-  //   roomId,
-  //   setCurrentUser,
-  //   socket,
-  // ]);
-
-  // if (status === USER_STATUS.CONNECTION_FAILED) {
-  //   return <ConnectionStatusPage />;
-  // }
-
+function Editor() {
   return (
-    <SplitterComponent>
-      <Sidebar />
-      <WorkSpace />
-    </SplitterComponent>
-  );
+    <>
+      <div className='flex gap-1'>
+        <Sidebar />
+        {/* <RunCodePanel /> */}
+        {/* <GroupChat /> */}
+        {/* <Collab /> */}
+        {/* <SettingsPanel /> */}
+        <FileExplorer />
+      </div>
+    </>
+  )
 }
 
-export default EditorPage;
+export default Editor
