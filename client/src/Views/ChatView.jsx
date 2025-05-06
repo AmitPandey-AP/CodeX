@@ -19,21 +19,27 @@ export default function GroupChat() {
     const [input, setInput] = useState('');
 
     const handleSend = () => {
-        socket.emit('sendMessage', { text: messages, roomId: currentUser.roomId });
-        setMessages([...messages,{text:input}])
+        socket.emit('sendMessage', { text: input, roomId: currentUser.roomId });
         if (input.trim()) {
             setMessages([...messages, { sender: 'edn', text: input, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
             setInput('');
         }
     };
     useEffect(() => {
-        socket.emit('join-room', { roomId: currentUser.roomId })
-        console.log("connection request send");
-        socket.on("messageReceived", ({text}) => {
-            setMessages([...messages, {text}]);
-        })
-        return () => socket.disconnect();
-    },[])
+    console.log("connection send");
+    socket.emit('join-room', { roomId: currentUser.roomId });
+    console.log("message aya hai");
+
+    const handler = ({ text }) => {
+        console.log("bhai ye aya hua message hai", text);
+        setMessages(prevMessages => [...prevMessages, { text }]);
+    };
+    socket.on("messageReceived", handler);
+        return () => {
+            socket.off("messageReceived", handler);
+        };
+        
+    },[currentUser.roomId])
 
     return (
         <div className="bg-[#1e1e1e] text-white p-4 rounded-md w-full max-w-md  border border-gray-600 h-vph flex flex-col">
