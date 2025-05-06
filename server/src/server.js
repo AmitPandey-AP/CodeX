@@ -63,8 +63,8 @@ io.on("connection",(socket)=>{
     //   newChat.messages.push({senderId,text})
     //   await newChat.save()
     // }
-    console.log(text);
-    socket.to(roomId).emit("messageReceived",{text})
+    console.log("from frontend:",text);
+    socket.to(roomId).emit("messageReceived",{text,sender:"Other",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })})
   })
   socket.on('disconnect',()=>{
     console.log('user disconnected');

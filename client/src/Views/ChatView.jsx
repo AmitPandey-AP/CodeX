@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import { IoSend } from 'react-icons/io5';
 import createSocketConnection from '../Utils/socket'
 import { useAppContext } from '../Context/AppContext';
 const socket = createSocketConnection();
 
 export default function GroupChat() {
+    const bottomRef = useRef(null);
     const { currentUser } = useAppContext()
     const [messages, setMessages] = useState([
         { sender: 'edn', text: 'hfw', time: '2:52 PM' },
@@ -21,18 +22,20 @@ export default function GroupChat() {
     const handleSend = () => {
         socket.emit('sendMessage', { text: input, roomId: currentUser.roomId });
         if (input.trim()) {
-            setMessages([...messages, { sender: 'edn', text: input, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
+            setMessages([...messages, { sender: 'You', text: input, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
             setInput('');
         }
     };
     useEffect(() => {
-    console.log("connection send");
+    socket.on('connect',()=>{
+        console.log("connection send");
+    })    
     socket.emit('join-room', { roomId: currentUser.roomId });
     console.log("message aya hai");
 
-    const handler = ({ text }) => {
-        console.log("bhai ye aya hua message hai", text);
-        setMessages(prevMessages => [...prevMessages, { text }]);
+    const handler = (data) => {
+        console.log("bhai ye aya hua message hai", data);
+        setMessages(prevMessages => [...prevMessages, data]);
     };
     socket.on("messageReceived", handler);
         return () => {
@@ -40,7 +43,9 @@ export default function GroupChat() {
         };
         
     },[currentUser.roomId])
-
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, [messages]);
     return (
         <div className="bg-[#1e1e1e] text-white p-4 rounded-md w-full max-w-md  border border-gray-600 h-vph flex flex-col">
             <h2 className="text-lg font-semibold mb-2 border-b border-gray-600 pb-1">Group Chat</h2>
@@ -48,14 +53,15 @@ export default function GroupChat() {
             {/* Chat messages container */}
             <div className="bg-[#1e1e1e] h-[576px] overflow-y-auto space-y-1 scrollbar">
                 {messages.map((msg, index) => (
-                    <div key={index} className="bg-[#1e1e1e] p-2 rounded-md flex justify-between items-start border-2 border-gray-700 w-[200px]">
-                        <div>
+                    <div key={index} className={`${msg.sender==="You"? "ml-50":""} bg-[#1e1e1e] p-2 rounded-md flex justify-between items-start border-2 border-gray-700 w-[200px]`}>
+                        <div >
                             <p className="text-green-400 text-sm font-semibold">{msg.sender}</p>
                             <p className="text-white text-sm">{msg.text}</p>
                         </div>
                         <span className="text-xs text-gray-400 ml-2">{msg.time}</span>
                     </div>
                 ))}
+                <div ref={bottomRef} />
             </div>
 
             {/* Input field */}
